@@ -32,6 +32,32 @@ async function generateCharacter() {
     const raceInfo = await fetchRaceInfo(race);
     const classInfo = await fetchClassInfo(classValue);
 
+    const startingEquipmentInfo = await fetchStartingEquipment(classValue);
+    const startingEquipmentOptions = await fetchStartingEquipmentOptions(classValue);
+    let startingEquipmentHTML = '<ul>';
+    startingEquipmentInfo.forEach(item => {
+        startingEquipmentHTML += `<li>${item.quantity}x ${item.equipment.name}</li>`;
+    });
+    startingEquipmentHTML += '</ul>';
+    let startingEquipmentOptionsHTML = '<ul>';
+    startingEquipmentOptions.forEach(option => {
+        startingEquipmentOptionsHTML += `<li>${option.desc}: `;
+        option.from.options.forEach(opt => {
+            if (opt.option_type === 'counted_reference') {
+                startingEquipmentOptionsHTML += `${opt.count}x ${opt.of.name}, `;
+            } else if (opt.option_type === 'choice' && opt.choice && opt.choice.from && opt.choice.from.options) {
+                startingEquipmentOptionsHTML += `${opt.choice.desc}: `;
+                opt.choice.from.options.forEach(choiceOpt => {
+                    startingEquipmentOptionsHTML += `${choiceOpt.name}, `;
+                });
+            }
+        });
+        startingEquipmentOptionsHTML = startingEquipmentOptionsHTML.slice(0, -2); 
+        startingEquipmentOptionsHTML += '</li>'; 
+    });
+    
+    startingEquipmentOptionsHTML = `<ul>${startingEquipmentOptionsHTML}</ul>`; 
+
     const abilityScores = [];
     for (let i=0; i < 6; i++) {
         abilityScores.push(Math.floor(Math.random() * 18) + 1);
@@ -59,6 +85,8 @@ async function generateCharacter() {
         <p><strong>Hit Die:</strong> d${classInfo.hitDie}</p>
         <p><strong>Proficiencies:</strong> ${classInfo.proficiencies}</p>
         <p><strong>Saving Throws:</strong> ${classInfo.savingThrows}</p>
+        <p><strong>Starting Equipment:</strong> ${startingEquipmentHTML}</p>
+        <p><strong>Starting Equipment Options:</strong> ${startingEquipmentOptionsHTML}</p>
         `;
     
         const characterInfoContainer = document.getElementById('character-info');
@@ -81,4 +109,15 @@ function getRandomNameByRace(race) {
 
     const names = raceNames[race];
     return names[Math.floor(Math.random() * names.length)];
+}
+
+async function fetchStartingEquipment(classValue) {
+    const response = await fetch(`https://www.dnd5eapi.co/api/classes/${classValue}`);
+    const data = await response.json();
+    return data.starting_equipment;
+}
+async function fetchStartingEquipmentOptions(classValue) {
+    const response = await fetch(`https://www.dnd5eapi.co/api/classes/${classValue}`);
+    const data = await response.json();
+    return data.starting_equipment_options;
 }
