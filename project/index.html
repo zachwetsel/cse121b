@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Character Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>D&D Character Generator</h1>
+    <label for="race-select">Select a race:</label>
+    <select id="race-select">
+        <option value="dragonborn">Dragonborn</option>
+        <option value="dwarf">Dwarf</option>
+        <option value="elf">Elf</option>
+        <option value="gnome">Gnome</option>
+        <option value="half-elf">Half-Elf</option>
+        <option value="half-orc">Half-Orc</option>
+        <option value="halfling">Halfling</option>
+        <option value="human">Human</option>
+        <option value="tiefling">Tiefling</option>
+        <!-- Add more options as needed -->
+    </select>
+    <label for="class-select">Select a class:</label>
+    <select id="class-select">
+        <option value="barbarian">Barbarian</option>
+        <option value="bard">Bard</option>
+        <option value="cleric">Cleric</option>
+        <option value="druid">Druid</option>
+        <option value="fighter">Fighter</option>
+        <option value="monk">Monk</option>
+        <option value="paladin">Paladin</option>
+        <option value="ranger">Ranger</option>
+        <option value="rogue">Rogue</option>
+        <option value="sorcerer">Sorcerer</option>
+        <option value="warlock">Warlock</option>
+        <option value="wizard">Wizard</option>
+        <!-- Add more options as needed -->
+    </select>
+    <button onclick="generateCharacter()">Generate Character</button>
+    <div id="character-info"></div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
